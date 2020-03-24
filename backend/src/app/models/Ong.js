@@ -2,6 +2,15 @@ import generateId from '../../utils/generateId';
 import db from '../../database';
 
 class Ong {
+  async findByPk(id) {
+    const ong = await db('ongs')
+      .where('id', id)
+      .select('name')
+      .first();
+
+    return ong;
+  }
+
   async findAll() {
     const ongs = await db('ongs').select('*');
 
