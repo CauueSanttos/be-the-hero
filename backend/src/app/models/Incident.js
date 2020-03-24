@@ -18,10 +18,19 @@ class Incident {
     return incidents;
   }
 
-  async findAll() {
-    const incidents = await db('incidents').select('*');
+  async findAll(page) {
+    const incidents = await db('incidents')
+      .limit(5)
+      .offset(( page - 1) * 5)
+      .select('*');
 
     return incidents;
+  }
+
+  async count() {
+    const [count] = await db('incidents').count();
+
+    return count['count(*)'];
   }
 
   async create(ong_id, title, description, value) {

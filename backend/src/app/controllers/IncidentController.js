@@ -2,7 +2,11 @@ import Incident from '../models/Incident';
 
 class IncidentController {
   async index(req, res) {
-    const incidents = await Incident.findAll();
+    const { page = 1 } = req.query;
+
+    const incidents = await Incident.findAll(page);
+
+    res.header('X-Total-Count', await Incident.count());
 
     return res.json(incidents);
   }
