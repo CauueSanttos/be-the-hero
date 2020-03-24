@@ -2,8 +2,9 @@ import { Router } from 'express';
 
 const routes = new Router();
 
-routes.get('/', (req, res) => {
-  return res.json({ hello: 'world' });
-})
+import OngController from './app/controllers/OngController';
+
+routes.get('/ongs', OngController.index);
+routes.post('/ongs', OngController.store);
 
 export default routes;
