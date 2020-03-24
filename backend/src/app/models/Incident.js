@@ -10,6 +10,14 @@ class Incident {
     return incident;
   }
 
+  async findAllByOng(ong_id) {
+    const incidents = await db('incidents')
+      .where('ong_id', ong_id)
+      .select('*');
+
+    return incidents;
+  }
+
   async findAll() {
     const incidents = await db('incidents').select('*');
 
