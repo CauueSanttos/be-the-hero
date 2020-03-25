@@ -46,6 +46,21 @@ export const Form = styled.form`
   input {
     margin-top: 8px;
   }
+
+  span {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    font-size: 18px;
+    color: #e02041;
+
+    strong {
+      margin-left: 5px;
+    }
+  }
 `;
 
 export const InputGroup = styled.div`
