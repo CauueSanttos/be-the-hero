@@ -19,4 +19,9 @@ export const ButtonStyle = styled.button`
   &:hover {
     filter: brightness(90%);
   }
+
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
 `;
