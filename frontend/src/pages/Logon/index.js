@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { FiLogIn } from 'react-icons/fi';
 
 import TextInput from '~/components/TextInput';
 import Button from '~/components/Button';
+import FormLink from '~/components/FormLink';
 
 import { Container, FormArea, Form } from './styles';
 
@@ -22,10 +22,10 @@ export default function Logon() {
           <TextInput placeholder="Sua ID" />
           <Button type="submit">Entrar</Button>
 
-          <Link to="/register">
+          <FormLink to="/register">
             <FiLogIn size={16} color="#E02041" />
             Não tenho cadastro
-          </Link>
+          </FormLink>
         </Form>
       </FormArea>
 
