@@ -22,20 +22,38 @@ export default function Incidents() {
   const [incidents, setIncidents] = useState([]);
   const [total, setTotal] = useState(0);
 
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
   async function loadIncidents() {
-    const response = await api.get('/incidents');
+    if (loading) {
+      return;
+    }
+
+    if (total > 0 && incidents.length === total) {
+      return;
+    }
+
+    setLoading(true);
+
+    const response = await api.get('/incidents', {
+      params: { page },
+    });
 
     const data = response.data.map(incidentRes => ({
       ...incidentRes,
       valueFormatted: formatPrice(incidentRes.value),
     }));
 
-    setIncidents(data);
+    setIncidents([...incidents, ...data]);
     setTotal(response.headers['x-total-count']);
+    setPage(page + 1);
+    setLoading(false);
   }
 
   useEffect(() => {
     loadIncidents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -54,6 +72,8 @@ export default function Incidents() {
         data={incidents}
         keyExtractor={incident => String(incident.id)}
         showsVerticalScrollIndicator={false}
+        onEndReached={loadIncidents}
+        onEndReachedThreshold={0.2}
         renderItem={({ item }) => <IncidentItem incident={item} />}
       />
     </Container>
