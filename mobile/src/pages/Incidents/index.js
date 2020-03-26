@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import api from '~/services/api';
+import { formatPrice } from '~/utils/format';
 
 import Container from '~/components/Container';
 import Header from '~/components/Header';
@@ -16,12 +19,31 @@ import {
 import logoImg from '~/assets/logo.png';
 
 export default function Incidents() {
+  const [incidents, setIncidents] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  async function loadIncidents() {
+    const response = await api.get('/incidents');
+
+    const data = response.data.map(incidentRes => ({
+      ...incidentRes,
+      valueFormatted: formatPrice(incidentRes.value),
+    }));
+
+    setIncidents(data);
+    setTotal(response.headers['x-total-count']);
+  }
+
+  useEffect(() => {
+    loadIncidents();
+  }, []);
+
   return (
     <Container>
       <Header>
         <Logo source={logoImg} />
         <HeaderText>
-          Total de <HeaderStrongText>0 casos</HeaderStrongText>.
+          Total de <HeaderStrongText>{total} casos</HeaderStrongText>.
         </HeaderText>
       </Header>
 
@@ -29,10 +51,10 @@ export default function Incidents() {
       <Description>Escolha um dos casos abaixo e salve o dia.</Description>
 
       <IncidentList
-        data={[1, 2, 3]}
-        keyExtractor={incident => String(incident)}
+        data={incidents}
+        keyExtractor={incident => String(incident.id)}
         showsVerticalScrollIndicator={false}
-        renderItem={() => <IncidentItem />}
+        renderItem={({ item }) => <IncidentItem incident={item} />}
       />
     </Container>
   );

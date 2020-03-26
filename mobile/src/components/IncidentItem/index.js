@@ -10,25 +10,25 @@ import {
   IncidentTouchableText,
 } from './styles';
 
-export default function IncidentItem() {
+export default function IncidentItem({ incident }) {
   const navigation = useNavigation();
 
-  function handleNavigateToDetail() {
-    navigation.navigate('Detail');
+  function handleNavigateToDetail(incidentParam) {
+    navigation.navigate('Detail', { incident: incidentParam });
   }
 
   return (
     <Container>
       <IncidentProperty>ONG:</IncidentProperty>
-      <IncidentValue>APAD</IncidentValue>
+      <IncidentValue>{incident.name}</IncidentValue>
 
       <IncidentProperty>CASO:</IncidentProperty>
-      <IncidentValue>Cadelinha atropelada</IncidentValue>
+      <IncidentValue>{incident.title}</IncidentValue>
 
       <IncidentProperty>VALOR:</IncidentProperty>
-      <IncidentValue>R$ 120,00</IncidentValue>
+      <IncidentValue>{incident.valueFormatted}</IncidentValue>
 
-      <IncidentTouchable onPress={handleNavigateToDetail}>
+      <IncidentTouchable onPress={() => handleNavigateToDetail(incident)}>
         <IncidentTouchableText>Ver mais detalhes</IncidentTouchableText>
         <Feather name="arrow-right" size={16} color="#e02041" />
       </IncidentTouchable>
