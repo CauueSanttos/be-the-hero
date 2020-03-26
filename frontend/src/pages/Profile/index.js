@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiPower, FiTrash2 } from 'react-icons/fi';
 
 import api from '~/services/api';
@@ -17,6 +17,8 @@ import logoImg from '~/assets/logo.svg';
 
 export default function Profile() {
   const [incidents, setIncidents] = useState([]);
+
+  const history = useHistory();
 
   const ongName = localStorage.getItem('bethehero@ongName');
   const ong_id = localStorage.getItem('bethehero@ongId');
@@ -62,6 +64,12 @@ export default function Profile() {
     }
   }
 
+  async function handleLogout() {
+    localStorage.clear();
+    history.push('/');
+    toast.success(`Até logo ${ongName}!`);
+  }
+
   return (
     <Container>
       <Header>
@@ -72,7 +80,7 @@ export default function Profile() {
           <Link to="/incidents/new">Cadastrar novo caso</Link>
         </Button>
 
-        <button className="power" type="button">
+        <button className="power" type="button" onClick={handleLogout}>
           <FiPower color="#E02041" size={18} />
         </button>
       </Header>
