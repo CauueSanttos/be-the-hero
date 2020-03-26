@@ -1,10 +1,10 @@
 import React from 'react';
 
+import Container from '~/components/Container';
+import Header from '~/components/Header';
 import IncidentItem from '~/components/IncidentItem';
 
 import {
-  Container,
-  Header,
   HeaderText,
   HeaderStrongText,
   Logo,
