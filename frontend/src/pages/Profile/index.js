@@ -1,4 +1,8 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
+
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { FiPower, FiTrash2 } from 'react-icons/fi';
 
@@ -13,12 +17,12 @@ import logoImg from '~/assets/logo.svg';
 
 export default function Profile() {
   const [incidents, setIncidents] = useState([]);
+
   const ongName = localStorage.getItem('bethehero@ongName');
+  const ong_id = localStorage.getItem('bethehero@ongId');
 
   useEffect(() => {
     async function loadIncidents() {
-      const ong_id = localStorage.getItem('bethehero@ongId');
-
       const response = await api.get('/profile', {
         headers: {
           Authorization: ong_id,
@@ -34,7 +38,29 @@ export default function Profile() {
     }
 
     loadIncidents();
-  }, []);
+  }, [ong_id]);
+
+  async function handleDeleteIncident(id) {
+    try {
+      await api.delete(`incidents/${id}`, {
+        headers: {
+          Authorization: ong_id,
+        },
+      });
+
+      setIncidents(
+        incidents.filter((incident) => {
+          if (incident.id !== id) {
+            return incident;
+          }
+
+          toast.success(`Caso: ${incident.title}, excluído com sucesso!`);
+        })
+      );
+    } catch (err) {
+      toast.error('Erro ao excluir o caso, tente novamente!');
+    }
+  }
 
   return (
     <Container>
@@ -65,7 +91,10 @@ export default function Profile() {
             <strong>VALOR:</strong>
             <p>{incidentItem.valueFormatted}</p>
 
-            <button type="button">
+            <button
+              type="button"
+              onClick={() => handleDeleteIncident(incidentItem.id)}
+            >
               <FiTrash2 size={20} color="#a8a8b3" />
             </button>
           </IncidentItem>
