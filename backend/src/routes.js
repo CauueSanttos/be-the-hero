@@ -1,21 +1,60 @@
 import { Router } from 'express';
 
-const routes = new Router();
-
 import OngController from './app/controllers/OngController';
 import IncidentController from './app/controllers/IncidentController';
 import ProfileController from './app/controllers/ProfileController';
 import SessionController from './app/controllers/SessionController';
 
-routes.post('/sessions', SessionController.store);
+import validateAuth from './app/validators/Auth';
+import validateOngStore from './app/validators/OngStore';
+import validateIncidentStore from './app/validators/IncidentStore';
+import validateIncidentList from './app/validators/IncidentList';
+import validateIncidentDelete from './app/validators/IncidentDelete';
 
-routes.get('/ongs', OngController.index);
-routes.post('/ongs', OngController.store);
+class Routes {
+  constructor() {
+    this.routes = new Router();
 
-routes.get('/profile', ProfileController.index);
+    this.session();
+    this.ongs();
+    this.profile();
+    this.incidents();
+  }
 
-routes.get('/incidents', IncidentController.index);
-routes.post('/incidents', IncidentController.store);
-routes.delete('/incidents/:id', IncidentController.delete);
+  session() {
+    this.routes.post('/sessions', SessionController.store);
+  }
 
-export default routes;
+  ongs() {
+    this.routes.get('/ongs', OngController.index);
+    this.routes.post('/ongs', validateOngStore, OngController.store);
+  }
+
+  profile() {
+    this.routes.get('/profile', validateAuth, ProfileController.index);
+  }
+
+  incidents() {
+    this.routes.get(
+      '/incidents',
+      validateIncidentList,
+      IncidentController.index
+    );
+
+    this.routes.post(
+      '/incidents',
+      validateAuth,
+      validateIncidentStore,
+      IncidentController.store
+    );
+
+    this.routes.delete(
+      '/incidents/:id',
+      validateAuth,
+      validateIncidentDelete,
+      IncidentController.delete
+    );
+  }
+}
+
+export default new Routes().routes;
