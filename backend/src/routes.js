@@ -6,6 +6,7 @@ import ProfileController from './app/controllers/ProfileController';
 import SessionController from './app/controllers/SessionController';
 
 import validateAuth from './app/validators/Auth';
+import validateSessionStore from './app/validators/SessionStore';
 import validateOngStore from './app/validators/OngStore';
 import validateIncidentStore from './app/validators/IncidentStore';
 import validateIncidentList from './app/validators/IncidentList';
@@ -22,7 +23,11 @@ class Routes {
   }
 
   session() {
-    this.routes.post('/sessions', SessionController.store);
+    this.routes.post(
+      '/sessions',
+      validateSessionStore,
+      SessionController.store
+    );
   }
 
   ongs() {
