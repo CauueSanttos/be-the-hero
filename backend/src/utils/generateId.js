@@ -1,5 +1,5 @@
-import crypto from 'crypto';
+const crypto = require('crypto');
 
-export default function () {
+module.exports = function () {
   return crypto.randomBytes(4).toString('HEX');
 }
